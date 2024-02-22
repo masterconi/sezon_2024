@@ -1,70 +1,115 @@
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.Joystick;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  public VictorSPX rf = new VictorSPX(1);
+  public VictorSPX rb = new VictorSPX(2);
+  public VictorSPX lf = new VictorSPX(3);
+  public VictorSPX lb = new VictorSPX(4);
 
- 
+  public CANSparkMax rs = new CANSparkMax(5, MotorType.kBrushless);
+  public CANSparkMax ls = new CANSparkMax(6, MotorType.kBrushless);
+  public VictorSPX mts = new VictorSPX(7);
+
+  Joystick driver = new Joystick(0);
+  Joystick oper = new Joystick(0);
+
+  public boolean Shoothing = true;
+  public boolean Sucking = false;
+
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    ls.restoreFactoryDefaults();
+    rs.restoreFactoryDefaults();
+
   }
 
-  
+  public void shoot(boolean Shoot) {
+    if (Shoot == true) {
+      ls.set(1.0);
+      rs.set(1.0);
+      Timer.delay(1.5);
+      mts.set(ControlMode.PercentOutput, 1.0);
+    } else if (Shoot == false) {
+      ls.set(-0.5);
+      rs.set(-0.5);
+      mts.set(ControlMode.PercentOutput, -0.5);
+    }
+  }
+
+  public void arcade(double thr, double tur) {
+
+    lb.set(ControlMode.PercentOutput, -thr + tur);
+    lf.set(ControlMode.PercentOutput, -thr + tur);
+    rf.set(ControlMode.PercentOutput, thr + tur);
+    rb.set(ControlMode.PercentOutput, thr + tur);
+
+  }
+
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+  }
 
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
   }
 
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        break;
-      case kDefaultAuto:
-      default:
-        break;
+    shoot(Shoothing);
+  }
+
+  @Override
+  public void teleopInit() {
+  }
+
+  @Override
+  public void teleopPeriodic() {
+    double thr = driver.getRawAxis(1);
+    double tur = driver.getRawAxis(0);
+    boolean shooting = oper.getRawButton(1);
+
+    arcade(thr, tur);
+    if (shooting) {
+      shoot(Shoothing);
+    } else if (!shooting) {
+      shoot(Sucking);
     }
   }
 
   @Override
-  public void teleopInit() {}
+  public void disabledInit() {
+  }
 
   @Override
-  public void teleopPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
   @Override
-  public void disabledInit() {}
+  public void testInit() {
+
+    arcade(1.0, 0);
+    shoot(Sucking);
+    System.out.println("test active");
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void testPeriodic() {
 
-
-  @Override
-  public void testInit() {}
-
+  }
 
   @Override
-  public void testPeriodic() {}
-
-
-  @Override
-  public void simulationInit() {}
-
+  public void simulationInit() {
+  }
 
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }
