@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
   Joystick driver = new Joystick(0);
   Joystick oper = new Joystick(0);
 
-  public boolean Shoothing = true;
+  public boolean Shooting = true;
   public boolean Sucking = false;
 
   @Override
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    shoot(Shoothing);
+    shoot(Shooting);
   }
 
   @Override
@@ -75,11 +75,12 @@ public class Robot extends TimedRobot {
     double thr = driver.getRawAxis(1);
     double tur = driver.getRawAxis(0);
     boolean shooting = oper.getRawButton(1);
+    boolean sucking = oper.getRawButton(2);
 
     arcade(thr, tur);
     if (shooting) {
-      shoot(Shoothing);
-    } else if (!shooting) {
+      shoot(Shooting);
+    } else if (sucking) {
       shoot(Sucking);
     }
   }
