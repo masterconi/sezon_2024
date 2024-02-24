@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
   public VictorSPX mts = new VictorSPX(7);
 
   Joystick driver = new Joystick(0);
-  Joystick oper = new Joystick(0);
+  Joystick oper = new Joystick(1);
 
   public boolean Shooting = true;
   public boolean Sucking = false;
@@ -44,7 +44,12 @@ public class Robot extends TimedRobot {
     }
   }
 
+  
   public void arcade(double thr, double tur) {
+   if (thr < 0.2 && thr > 0 ){thr = 0;}
+   else if (thr > -0.2 && thr < 0){ thr = 0; }
+ if (tur < 0.2 && tur > 0 ){tur = 0;}
+   else if (tur > -0.2 && tur < 0){ tur = 0; }
 
     lb.set(ControlMode.PercentOutput, -thr + tur);
     lf.set(ControlMode.PercentOutput, -thr + tur);
