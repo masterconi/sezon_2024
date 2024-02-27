@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
@@ -21,10 +23,14 @@ public class Robot extends TimedRobot {
   public CANSparkMax ls = new CANSparkMax(5, MotorType.kBrushless);
   public VictorSPX mts = new VictorSPX(7);
 
+  public VictorSPX hr = new VictorSPX(8);
+  public VictorSPX hl = new VictorSPX(9);
+
   UsbCamera camera1;
   UsbCamera camera2;
 
-  Joystick driver = new Joystick(0);
+  XboxController driver = new XboxController(0); 
+  //Joystick driver = new Joystick(0);
   Joystick oper = new Joystick(1);
 
   public boolean Shooting = true;
@@ -37,6 +43,17 @@ public class Robot extends TimedRobot {
     
         camera1 = CameraServer.startAutomaticCapture(0);
     camera2 = CameraServer.startAutomaticCapture(1);
+
+  }
+
+
+  public void climb(){
+
+    rf.set(ControlMode.PercentOutput, 1.0);
+    rb.set(ControlMode.PercentOutput, 1.0);
+    Timer.delay(0.1); // dont turn off if not this 
+    rf.set(ControlMode.PercentOutput, 0.0);
+    rb.set(ControlMode.PercentOutput, 0.0);
 
   }
 
@@ -61,8 +78,16 @@ public class Robot extends TimedRobot {
     }
   }
 
-  
-  public void arcade(double thr, double tur) {
+  public void tank(double r, double l){
+
+    lb.set(ControlMode.PercentOutput, l);
+    lf.set(ControlMode.PercentOutput, l);
+    rf.set(ControlMode.PercentOutput, -r);
+    rb.set(ControlMode.PercentOutput, -r);
+  }
+
+
+public void arcadeJ(double thr, double tur) {
    if (thr < 0.2 && thr > 0 ){thr = 0;}
    else if (thr > -0.2 && thr < 0){ thr = 0; }
  if (tur < 0.2 && tur > 0 ){tur = 0;}
@@ -94,12 +119,25 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double thr = driver.getRawAxis(1);
-    double tur = driver.getRawAxis(0);
-    boolean shooting = driver.getRawButton(1);
-    boolean sucking = driver.getRawButton(2);
 
-    arcade(thr, tur);
+
+    double thrR = -driver.getRawAxis(1);
+    double thrL = -driver.getRawAxis(5);
+        
+   //double thr = -driver.getRawAxis(1);
+   //double tur = driver.getRawAxis(4);
+
+   // boolean shooting = driver.getRawButton(1);
+    //boolean sucking = driver.getRawButton(2);
+    boolean sucking = oper.getRawButton(1);
+    boolean shooting = oper.getRawButton(2);
+    boolean climbing = oper.getRawButton(3);
+
+   tank(thrR, thrL);
+   // arcade(thr, tur);
+   if (climbing) {
+    climb();
+   }
     if (shooting) {
       shoot(Shooting);
     } else if (sucking) {
@@ -118,7 +156,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
 
-    arcade(1.0, 0);
+    tank(1.0, 1.0);
     shoot(Sucking);
     System.out.println("test active");
   }
