@@ -3,11 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
@@ -41,7 +39,7 @@ public class Robot extends TimedRobot {
     ls.restoreFactoryDefaults();
     rs.restoreFactoryDefaults();
     
-        camera1 = CameraServer.startAutomaticCapture(0);
+    camera1 = CameraServer.startAutomaticCapture(0);
     camera2 = CameraServer.startAutomaticCapture(1);
 
   }
