@@ -23,8 +23,8 @@ public class Robot extends TimedRobot {
   public CANSparkMax ls = new CANSparkMax(5, MotorType.kBrushless);
   public VictorSPX mts = new VictorSPX(7);
 
-  public VictorSPX hr = new VictorSPX(8);
-  public VictorSPX hl = new VictorSPX(9);
+  public VictorSPX cr = new VictorSPX(8);
+  public VictorSPX cl = new VictorSPX(9);
 
   UsbCamera camera1;
   UsbCamera camera2;
@@ -49,11 +49,11 @@ public class Robot extends TimedRobot {
 
   public void climb(){
 
-    rf.set(ControlMode.PercentOutput, 1.0);
-    rb.set(ControlMode.PercentOutput, 1.0);
+    cr.set(ControlMode.PercentOutput, 1.0);
+    cl.set(ControlMode.PercentOutput, -1.0);
     Timer.delay(0.1); // dont turn off if not this 
-    rf.set(ControlMode.PercentOutput, 0.0);
-    rb.set(ControlMode.PercentOutput, 0.0);
+    cr.set(ControlMode.PercentOutput, 0.0);
+    cl.set(ControlMode.PercentOutput, 0.0);
 
   }
 
