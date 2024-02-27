@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.Timer;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -14,9 +17,12 @@ public class Robot extends TimedRobot {
   public VictorSPX lf = new VictorSPX(3);
   public VictorSPX lb = new VictorSPX(4);
 
-  public CANSparkMax rs = new CANSparkMax(5, MotorType.kBrushless);
-  public CANSparkMax ls = new CANSparkMax(6, MotorType.kBrushless);
+  public CANSparkMax rs = new CANSparkMax(6, MotorType.kBrushless);
+  public CANSparkMax ls = new CANSparkMax(5, MotorType.kBrushless);
   public VictorSPX mts = new VictorSPX(7);
+
+  UsbCamera camera1;
+  UsbCamera camera2;
 
   Joystick driver = new Joystick(0);
   Joystick oper = new Joystick(1);
@@ -28,19 +34,30 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ls.restoreFactoryDefaults();
     rs.restoreFactoryDefaults();
+    
+        camera1 = CameraServer.startAutomaticCapture(0);
+    camera2 = CameraServer.startAutomaticCapture(1);
 
   }
 
   public void shoot(boolean Shoot) {
     if (Shoot == true) {
-      ls.set(1.0);
+      ls.set(-1.0);
       rs.set(1.0);
-      Timer.delay(1.5);
-      mts.set(ControlMode.PercentOutput, 1.0);
+      Timer.delay(1.0);
+      mts.set(ControlMode.PercentOutput, -1.0);
+      Timer.delay(0.75);
+      ls.set(0);
+      rs.set(0);
+      mts.set(ControlMode.PercentOutput, 0);
     } else if (Shoot == false) {
-      ls.set(-0.5);
+      ls.set(0.5);
       rs.set(-0.5);
-      mts.set(ControlMode.PercentOutput, -0.5);
+      mts.set(ControlMode.PercentOutput, 0.5);
+      Timer.delay(0.3);
+      ls.set(0);
+      rs.set(0);
+      mts.set(ControlMode.PercentOutput, 0);
     }
   }
 
@@ -51,10 +68,10 @@ public class Robot extends TimedRobot {
  if (tur < 0.2 && tur > 0 ){tur = 0;}
    else if (tur > -0.2 && tur < 0){ tur = 0; }
 
-    lb.set(ControlMode.PercentOutput, -thr + tur);
-    lf.set(ControlMode.PercentOutput, -thr + tur);
-    rf.set(ControlMode.PercentOutput, thr + tur);
-    rb.set(ControlMode.PercentOutput, thr + tur);
+    lb.set(ControlMode.PercentOutput, thr + tur);
+    lf.set(ControlMode.PercentOutput, thr + tur);
+    rf.set(ControlMode.PercentOutput, -thr + tur);
+    rb.set(ControlMode.PercentOutput, -thr + tur);
 
   }
 
@@ -79,8 +96,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double thr = driver.getRawAxis(1);
     double tur = driver.getRawAxis(0);
-    boolean shooting = oper.getRawButton(1);
-    boolean sucking = oper.getRawButton(2);
+    boolean shooting = driver.getRawButton(1);
+    boolean sucking = driver.getRawButton(2);
 
     arcade(thr, tur);
     if (shooting) {
