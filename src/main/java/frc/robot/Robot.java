@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
     } else if (Shoot == false) {
       ls.set(0.5);
       rs.set(-0.5);
-      mts.set(ControlMode.PercentOutput, 0.5);
+      mts.set(ControlMode.PercentOutput, 0.75);
       Timer.delay(0.3);
       ls.set(0);
       rs.set(0);
