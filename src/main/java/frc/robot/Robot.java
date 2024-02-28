@@ -161,6 +161,7 @@ public void arcadeJ(double thr, double tur) {
 
     tank(1.0, 1.0);
     shoot(Sucking);
+    climb();
     System.out.println("test active");
   }
 
