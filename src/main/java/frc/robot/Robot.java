@@ -78,6 +78,11 @@ public class Robot extends TimedRobot {
 
   public void tank(double r, double l){
 
+   if (r < 0.2 && r > 0 ){r = 0;}
+   else if (r > -0.2 && r < 0){ r = 0; }
+ if (l < 0.2 && l > 0 ){l = 0;}
+   else if (l > -0.2 && l < 0){ l = 0; }
+
     lb.set(ControlMode.PercentOutput, l);
     lf.set(ControlMode.PercentOutput, l);
     rf.set(ControlMode.PercentOutput, -r);
