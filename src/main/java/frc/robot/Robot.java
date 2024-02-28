@@ -59,9 +59,9 @@ public class Robot extends TimedRobot {
     if (Shoot == true) {
       ls.set(-1.0);
       rs.set(1.0);
-      Timer.delay(1.0);
-      mts.set(ControlMode.PercentOutput, -1.0);
-      Timer.delay(0.75);
+      Timer.delay(0.5);
+      mts.set(ControlMode.PercentOutput, 1.0);
+      Timer.delay(0.2);
       ls.set(0);
       rs.set(0);
       mts.set(ControlMode.PercentOutput, 0);
@@ -83,10 +83,10 @@ public class Robot extends TimedRobot {
  if (l < 0.2 && l > 0 ){l = 0;}
    else if (l > -0.2 && l < 0){ l = 0; }
 
-    lb.set(ControlMode.PercentOutput, l);
-    lf.set(ControlMode.PercentOutput, l);
-    rf.set(ControlMode.PercentOutput, -r);
-    rb.set(ControlMode.PercentOutput, -r);
+    lb.set(ControlMode.PercentOutput, -l);
+    lf.set(ControlMode.PercentOutput, -l);
+    rf.set(ControlMode.PercentOutput, r);
+    rb.set(ControlMode.PercentOutput, r);
   }
 
 
@@ -96,10 +96,10 @@ public void arcadeJ(double thr, double tur) {
  if (tur < 0.2 && tur > 0 ){tur = 0;}
    else if (tur > -0.2 && tur < 0){ tur = 0; }
 
-    lb.set(ControlMode.PercentOutput, thr + tur);
-    lf.set(ControlMode.PercentOutput, thr + tur);
-    rf.set(ControlMode.PercentOutput, -thr + tur);
-    rb.set(ControlMode.PercentOutput, -thr + tur);
+    lb.set(ControlMode.PercentOutput, -thr + tur);
+    lf.set(ControlMode.PercentOutput, -thr + tur);
+    rf.set(ControlMode.PercentOutput, thr + tur);
+    rb.set(ControlMode.PercentOutput, thr + tur);
 
   }
 
@@ -113,7 +113,9 @@ public void arcadeJ(double thr, double tur) {
 
   @Override
   public void autonomousPeriodic() {
-    shoot(Shooting);
+    tank(-1, -1);
+    Timer.delay(0.5);
+    tank(0,0);
   }
 
   @Override
@@ -124,20 +126,20 @@ public void arcadeJ(double thr, double tur) {
   public void teleopPeriodic() {
 
 
-    double thrR = -driver.getRawAxis(1);
-    double thrL = -driver.getRawAxis(5);
+    //double thrR = -driver.getRawAxis(1);
+    //double thrL = -driver.getRawAxis(5);
         
-   //double thr = -driver.getRawAxis(1);
-   //double tur = driver.getRawAxis(4);
+   double thr = -driver.getRawAxis(1);
+   double tur = driver.getRawAxis(4);
 
    // boolean shooting = driver.getRawButton(1);
     //boolean sucking = driver.getRawButton(2);
-    boolean sucking = oper.getRawButton(1);
-    boolean shooting = oper.getRawButton(2);
+    boolean sucking = oper.getRawButton(2);
+    boolean shooting = oper.getRawButton(1);
     boolean climbing = oper.getRawButton(3);
 
-   tank(thrR, thrL);
-   // arcade(thr, tur);
+   //tank(thrR, thrL);
+    arcadeJ(thr, tur);
    if (climbing) {
     climb();
    }
