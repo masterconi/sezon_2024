@@ -44,14 +44,26 @@ public class Robot extends TimedRobot {
 
   }
 
+  public void unclimb(){
 
-  public void climb(){
-
-    cr.set(ControlMode.PercentOutput, 1.0);
-    cl.set(ControlMode.PercentOutput, -1.0);
+    
+      cr.set(ControlMode.PercentOutput, -1.0);
+    cl.set(ControlMode.PercentOutput, 1.0);
     Timer.delay(0.1); // dont turn off if not this 
     cr.set(ControlMode.PercentOutput, 0.0);
     cl.set(ControlMode.PercentOutput, 0.0);
+  }
+
+  public void climb(){
+
+    
+      cr.set(ControlMode.PercentOutput, -1.0);
+    cl.set(ControlMode.PercentOutput, 1.0);
+    Timer.delay(0.1); // dont turn off if not this 
+    cr.set(ControlMode.PercentOutput, 0.0);
+    cl.set(ControlMode.PercentOutput, 0.0);
+
+
 
   }
 
@@ -68,7 +80,7 @@ public class Robot extends TimedRobot {
     } else if (Shoot == false) {
       ls.set(0.5);
       rs.set(-0.5);
-      mts.set(ControlMode.PercentOutput, 0.75);
+      mts.set(ControlMode.PercentOutput, -0.75);
       Timer.delay(0.3);
       ls.set(0);
       rs.set(0);
@@ -109,13 +121,17 @@ public void arcadeJ(double thr, double tur) {
 
   @Override
   public void autonomousInit() {
+    shoot(Shooting);
+    Timer.delay(1.5);
+    arcadeJ(-0.4,0);
+    Timer.delay(3);
+    arcadeJ(0.0, 0.0);
+
   }
 
   @Override
   public void autonomousPeriodic() {
-    tank(-1, -1);
-    Timer.delay(0.5);
-    tank(0,0);
+ 
   }
 
   @Override
@@ -137,11 +153,14 @@ public void arcadeJ(double thr, double tur) {
     boolean sucking = oper.getRawButton(2);
     boolean shooting = oper.getRawButton(1);
     boolean climbing = oper.getRawButton(3);
-
+    boolean unclimbing = oper.getRawButton(4);
    //tank(thrR, thrL);
     arcadeJ(thr, tur);
    if (climbing) {
     climb();
+   }
+      if (unclimbing) {
+    unclimb();
    }
     if (shooting) {
       shoot(Shooting);
