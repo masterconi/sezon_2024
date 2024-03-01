@@ -47,8 +47,9 @@ public class Robot extends TimedRobot {
   public void unclimb(){
 
     
-      cr.set(ControlMode.PercentOutput, -1.0);
-    cl.set(ControlMode.PercentOutput, 1.0);
+      cr.set(ControlMode.PercentOutput, 1.0);
+    cl.set(ControlMode.PercentOutput, -
+    1.0);
     Timer.delay(0.1); // dont turn off if not this 
     cr.set(ControlMode.PercentOutput, 0.0);
     cl.set(ControlMode.PercentOutput, 0.0);
