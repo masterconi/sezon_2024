@@ -46,7 +46,6 @@ public class Robot extends TimedRobot {
 
   public void unclimb(){
 
-    
       cr.set(ControlMode.PercentOutput, 1.0);
     cl.set(ControlMode.PercentOutput, -
     1.0);
@@ -56,15 +55,12 @@ public class Robot extends TimedRobot {
   }
 
   public void climb(){
-
     
       cr.set(ControlMode.PercentOutput, -1.0);
     cl.set(ControlMode.PercentOutput, 1.0);
     Timer.delay(0.1); // dont turn off if not this 
     cr.set(ControlMode.PercentOutput, 0.0);
     cl.set(ControlMode.PercentOutput, 0.0);
-
-
 
   }
 
@@ -104,6 +100,7 @@ public class Robot extends TimedRobot {
 
 
 public void arcadeJ(double thr, double tur) {
+
    if (thr < 0.2 && thr > 0 ){thr = 0;}
    else if (thr > -0.2 && thr < 0){ thr = 0; }
  if (tur < 0.2 && tur > 0 ){tur = 0;}
@@ -127,7 +124,6 @@ public void arcadeJ(double thr, double tur) {
     arcadeJ(-0.4,0);
     Timer.delay(3);
     arcadeJ(0.0, 0.0);
-
   }
 
   @Override
@@ -141,7 +137,6 @@ public void arcadeJ(double thr, double tur) {
 
   @Override
   public void teleopPeriodic() {
-
 
     //double thrR = -driver.getRawAxis(1);
     //double thrL = -driver.getRawAxis(5);
@@ -180,7 +175,6 @@ public void arcadeJ(double thr, double tur) {
 
   @Override
   public void testInit() {
-
     tank(1.0, 1.0);
     shoot(Sucking);
     climb();
